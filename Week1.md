@@ -2,7 +2,7 @@
 
 Hadoop is basically a framework rather than a language which was mainly written in Java .
 
-Types of data
+Types of data:
  	- Structured Data (RDBMS,CSV)
  	- Semi-structured (Excel)
  	- Non-structured (Images,videos and etc)
