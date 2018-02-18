@@ -1,0 +1,200 @@
+echo $JAVA_HOME
+whoami
+sudo apt-get install vim
+hostname
+sudo su
+whoami
+sudo addgroup hadoop
+cd /home
+ls
+sudo adduser hduser hadoop
+sudo visudo
+hduser ALL=(ALL)ALL
+exit
+whoami
+su hduser
+whoami
+
+logout and login as hadoop
+hadoop terminal
+sudo apt-get install opessh-server
+ssh-keygen (for communicatin  authentication)
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod700~/.ssh/authorized_keys
+sudo /etc/init.d/ssh restart
+ssh localhost
+sudo vim /etc/sysctl.conf
+net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+net.ipv6.conf.io.disable_ipv6=1
+
+
+
+
+sudo reboot
+cat /proc/sys/net/ipv6/conf/all/disable_ipv6
+
+Download hadoop
+cd /Desktop
+ls
+sudo cp hadoop-1.2.1.tar.gz /usr/local
+cd /usr/local
+ls
+sudo gunzip hadoop-1.2.1.tar.gz
+ls
+sudo tar -xvf hadoop-1.2.1.tar
+ls
+sudo rm hadoop-1.2.1.tar
+sudo ln -s hadop-1.2.1 hadoop
+ls
+cd hadoop
+ls
+cd..
+cd hadoop-1.2.1/
+ls
+ls -ltr
+sudo chown -R hduser:hadoop hadoop-1.2.1
+ls -ltr
+sudo chmod 777 hadoop-1.2.1
+cd /hadoop
+cd /conf
+sudo vim hadoop-env.sh
+export HADOOP_OPTS=-Djava.net.preferIPv4Stack=true
+export HADOOP_HOME_WARN_SUPRESS="TRUE"
+export JAVA_HOME=/usr/local/java/jdk1.8.0_31
+:wq
+
+ls
+cd /home/hduser
+sudo .bashrc
+export HADOOP_HOME=/usr/local/hadoop
+export JAVA_HOME=/use/local/java/jdk1.8.0
+unaliasfs&> /dev/null
+aliasfs="hadoop fs"
+unaliasfs&> /dev/null
+aliashls="fs-ls"
+export PATH=$PATH:$HADOOP_HOME/bin:$PATH:$JAVA_HOME/bin
+
+source .bashrc
+
+sudo mkdir -p /app/hadoop/tmp
+sudo chown -R hduser:hadoop /app/hadoop/tmp
+sudo chmod -R 777 /app/hadoop/tmp
+
+sudo nano yarn.site.xml
+
+<property>
+<name>yarn.nodemanager.aux-services</name>
+<value>mapreduce_shuffle</value>
+<description>A base Directory </description>
+</property>
+<name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+<value>org.apache.hadoop.mapred.ShuffleHandler</value>
+</property>
+
+cd /usr/local/hadoop/conf/core-site.xml
+
+
+
+
+<configuration>
+<property>
+<name>hadoop.tmp.dir</name>
+<value>/app/hadoop/tmp</value>
+<description>A base Directory </description>
+</property>
+
+<property>
+<name>fs.default.name</name>
+<value>hdfs://localhost:54310</value>
+<description>the name of the default file system</description>
+</property>
+
+sudo nano /usr/local/hadoop/conf/mapred-site.xml
+
+ <property> 
+      <name>mapreduce.framework.name</name>
+      <value>yarn</value>
+   </property>
+   
+   sudo mkdir -p /usr/local/hadoop/yarn_data/hdfs/namenode
+   sudo mkdir -p /usr/local/hadoop/yarn_data/hdfs/datanode
+   
+   sudo chmod 777 /usr/local/hadoop/yarn_data/hdfs/namenode
+   sudo chmod 777 /usr/local/hadoop/yarn_data/hdfs/datanode
+   
+   sudo chown -R hduser:hadoop /usr/local/hadoop/yarn_data/hdfs/namenode
+   sudo chown -R hduser:hadoop /usr/local/hadoop/yarn_data/hdfs/datanode
+   
+   
+   
+   
+   
+sudo nano /usr/local/conf/hdfs-site.xml
+<property>
+      <name>dfs.replication</name>
+      <value>1</value>
+   </property>
+    
+   <property>
+      <name>dfs.namenode.name.dir</name>
+      <value>file:/usr/local/hadoop/yarn_data/hdfs/namenode</value>
+   </property>
+    
+   <property>
+      <name>dfs.datanode.data.dir</name>
+      <value>file:/usr/local/hadoop/yarn_data/hdfs/datanode</value>
+   </property>
+
+
+
+hadoop namenode -format
+start-all.sh(in sbin)
+jps
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

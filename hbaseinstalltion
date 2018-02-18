@@ -1,0 +1,32 @@
+1-Download Hbase file
+wget http://www.interior-dsgn.com/apache/hbase/stable/hbase-0.98.8-hadoop2-bin.tar.gz
+
+2-extract 
+tar -zxvf hbase-0.98.8-hadoop2-bin.tar.gz
+3-move to hbase
+mv hbase-0.99.1/* Hbase/
+4- edit hbase-env.sh
+cd /usr/local/Hbase/conf
+sudo nano hbase-env.sh
+export JAVA_HOME=/usr/lib/jvm/java-1.7.0
+5-edit hbase-site.xml
+cd /usr/local/HBase/
+cd conf
+sudo nano hbase-site.xml
+
+<configuration>
+   //Here you have to set the path where you want HBase to store its files.
+   <property>
+      <name>hbase.rootdir</name>
+      <value>file:/home/hadoop/HBase/HFiles</value>
+   </property>
+	
+   //Here you have to set the path where you want HBase to store its built in zookeeper  files.
+   <property>
+      <name>hbase.zookeeper.property.dataDir</name>
+      <value>/home/hadoop/zookeeper</value>
+   </property>
+</configuration>
+
+$cd /usr/local/HBase/bin
+$./start-hbase.sh

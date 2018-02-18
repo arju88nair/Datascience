@@ -1,0 +1,254 @@
+1-start hive terminal:
+hive
+2-create database
+hive> CREATE SCHEMA userdb;
+3-display database:
+hive>show databases;
+4-display all the tables:
+hive>show tables;
+5-drops the database using schema
+hive>drop schema userdb;
+6-Create table command
+hive>CREATE TABLE student(id int, name String,
+salary String, destination String)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ‘\t’
+LINES TERMINATED BY ‘\n’
+STORED AS TEXTFILE;
+7-Alter command use for changing table name,changing column names,adding columns,and deleting or replacing columns.
+hive> ALTER TABLE Student RENAME TO student1;
+hive>ALTER TABLE employee CHANGE name ename String;
+hive> ALTER TABLE employee CHANGE salary salary Double;
+hive> ALTER TABLE employee ADD COLUMNS (dept STRING COMMENT 'Department name');
+hive>ALTER TABLE employee REPLACE COLUMNS (eid INT empid Int,ename STRING name String);
+
+8: Partition
+hive>create table all_states(state string, District string,Enrolments string)
+row format delimited
+fields terminated by ',';
+hive>Load data local inpath '/home/hduser/Desktop/AllStates.csv' into table allstates;
+hive>create table state_part(District string,Enrolments string) PARTITIONED BY(state string);
+hive>set hive.exec.dynamic.partition.mode=strict
+hive>INSERT into TABLE state_part PARTITION(state) SELECT district,enrolments,state from  all_states;
+
+CREATE TABLE cityreport(state string,District string) partitioned BY (Enrolments string) row format delimited FIELDS terminated BY ','
+stored AS textfile;
+
+
+
+
+
+
+
+hive> INSERT INTO TABLE state_part PARTITION(state) SELECT * FROM all_states;
+
+
+
+9: Buckting
+hive>set.hive.enforce.bucketing=true;
+hive>create table samplebucket(firstname string,jobid int,department string,salary string,country string)
+clustered by (country) into 4 buckets
+row format delimited
+fields terminated by ',';
+
+10:Built in operators
+hive> SELECT * FROM employee WHERE Id=1205;
+hive> SELECT * FROM employee WHERE Salary>=40000;
+hive> SELECT 20+30 ADD FROM temp;
+hive> SELECT * FROM employee WHERE Salary>40000 && Dept=TP;
+
+11: view
+hive> CREATE VIEW emp_30000 AS SELECT * FROM employee WHERE salary>30000;
+hive>DROP VIEW view_name
+
+12:create index
+hive> CREATE INDEX inedx_salary ON TABLE employee(salary) AS 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler';
+hive> DROP INDEX index_salary ON employee;
+
+13: order by
+hive> SELECT Id, Name, Dept FROM employee ORDER BY DEPT;
+
+CREATE TABLE external cityreport(cityid string,creport string, ctover string)partitioned BY (city string)row format delimited FIELDS terminated BY ‘|’stored AS textfile;
+
+
+
+
+
+14: join
+hive> SELECT c.ID, c.NAME, c.AGE, o.AMOUNT  FROM CUSTOMERS c JOIN ORDERS o ON (c.ID = o.CUSTOMER_ID);
++----+----------+-----+-----------+----------+ 
+| ID | NAME     | AGE | ADDRESS   | SALARY   | 
++----+----------+-----+-----------+----------+ 
+| 1  | Ramesh   | 32  | Ahmedabad | 2000.00  |  
+| 2  | Khilan   | 25  | Delhi   2  | 1500.00  |  
+| 3  | kaushik  | 23  | Kota      | 2000.00  | 
+| 4  | Chaitali | 25  | Mumbai    | 6500.00  | 
+| 5  | Hardik   | 27  | Bhopal    | 8500.00  | 
+| 6  | Komal    | 22  | MP        | 4500.00  | 
+| 7  | Muffy    | 24  | Indore    | 10000.00 | 
++----+----------+-----+-----------+----------+
+
++-----+---------------------+-------------+--------+ 
+|OID  | DATE                | CUSTOMER_ID | AMOUNT | 
++-----+---------------------+-------------+--------+ 
+| 102 | 2009-10-08 00:00:00 |           3 | 3000   | 
+| 100 | 2009-10-08 00:00:00 |           3 | 1500   | 
+| 101 | 2009-11-20 00:00:00 |           2 | 1560   | 
+| 103 | 2008-05-20 00:00:00 |           4 | 2060   | 
++-----+---------------------+-------------+--------+
+
++----+----------+-----+--------+ 
+| ID | NAME     | AGE | AMOUNT | 
++----+----------+-----+--------+ 
+| 3  | kaushik  | 23  | 3000   | 
+| 3  | kaushik  | 23  | 1500   | 
+| 2  | Khilan   | 25  | 1560   | 
+| 4  | Chaitali | 25  | 2060   | 
++----+----------+-----+--------+
+
+15: Left outer join:
+hive> SELECT c.ID, c.NAME, o.AMOUNT, o.DATE FROM CUSTOMERS c LEFT OUTER JOIN ORDERS o ON (c.ID = o.CUSTOMER_ID);
++----+----------+--------+---------------------+ 
+| ID | NAME     | AMOUNT | DATE                | 
++----+----------+--------+---------------------+ 
+| 1  | Ramesh   | NULL   | NULL                | 
+| 2  | Khilan   | 1560   | 2009-11-20 00:00:00 | 
+| 3  | kaushik  | 3000   | 2009-10-08 00:00:00 | 
+| 3  | kaushik  | 1500   | 2009-10-08 00:00:00 | 
+| 4  | Chaitali | 2060   | 2008-05-20 00:00:00 | 
+| 5  | Hardik   | NULL   | NULL                | 
+| 6  | Komal    | NULL   | NULL                | 
+| 7  | Muffy    | NULL   | NULL                | 
++----+----------+--------+---------------------+
+
+16: Right outer join:
+hive> SELECT c.ID, c.NAME, o.AMOUNT, o.DATE FROM CUSTOMERS c RIGHT OUTER JOIN ORDERS o ON (c.ID = o.CUSTOMER_ID); 
+------+----------+--------+---------------------+ 
+| ID   | NAME     | AMOUNT | DATE                | 
++------+----------+--------+---------------------+ 
+| 3    | kaushik  | 3000   | 2009-10-08 00:00:00 | 
+| 3    | kaushik  | 1500   | 2009-10-08 00:00:00 | 
+| 2    | Khilan   | 1560   | 2009-11-20 00:00:00 | 
+| 4    | Chaitali | 2060   | 2008-05-20 00:00:00 | 
++------+----------+--------+---------------------+
+17:Full outer join
+hive> SELECT c.ID, c.NAME, o.AMOUNT, o.DATE 
+FROM CUSTOMERS c 
+FULL OUTER JOIN ORDERS o 
+ON (c.ID = o.CUSTOMER_ID);
+
+------+----------+--------+---------------------+ 
+| ID   | NAME     | AMOUNT | DATE                | 
++------+----------+--------+---------------------+ 
+| 1    | Ramesh   | NULL   | NULL                | 
+| 2    | Khilan   | 1560   | 2009-11-20 00:00:00 | 
+| 3    | kaushik  | 3000   | 2009-10-08 00:00:00 | 
+| 3    | kaushik  | 1500   | 2009-10-08 00:00:00 | 
+| 4    | Chaitali | 2060   | 2008-05-20 00:00:00 | 
+| 5    | Hardik   | NULL   | NULL                | 
+| 6    | Komal    | NULL   | NULL                |
+| 7    | Muffy    | NULL   | NULL                |  
+| 3    | kaushik  | 3000   | 2009-10-08 00:00:00 | 
+| 3    | kaushik  | 1500   | 2009-10-08 00:00:00 | 
+| 2    | Khilan   | 1560   | 2009-11-20 00:00:00 | 
+| 4    | Chaitali | 2060   | 2008-05-20 00:00:00 | 
++------+----------+--------+---------------------+
+
+18: Complex data types:
+
+Array data:
+1/2/17	karnataka	23.2,22.3,20.5,25.5,24.5,20.3
+1/2/17	Maharastra	23.2,22.3,20.5,25.5,24.5,20.3
+1/2/17	Tamilnadu	23.2,22.3,20.5,25.5,24.5,20.3
+1/2/17	Andhra	23.2,22.3,20.5,25.5,24.5,20.3
+1/2/17	kerala	23.2,22.3,20.5,25.5,24.5,20.3
+1/2/17	jharkhand	23.2,22.3,20.5,25.5,24.5,20.3
+
+
+
+
+
+i:array
+hive>create table Temperature(date string,city string,MyTemp array<double>) row format delimited fields terminated by ‘\t’ collection items terminated by ‘,’;
+hive>load data local inpath ‘/home/Desktop/Temperature.txt’ into table Temperature;
+hive>select city,MyTemp[0] from Temperature;
+
+ii:Map
+SecondarySchool	Assam	Male	2015:56344,2016:57573,2017:58389
+SecondarySchool	Assam	Female	2015:56344,2016:57573,2017:58389
+SecondarySchool	Bihar	Male	2015:56344,2016:57573,2017:58389
+SecondarySchool	Bihar	Female	2015:56344,2016:57573,2017:58389
+SecondarySchool	Chandigarh	Male	2015:56344,2016:57573,2017:58389
+SecondarySchool	Chandigarh	Female	2015:56344,2016:57573,2017:58389
+SecondarySchool	Assam	Male	2015:56344,2016:57573,2017:58389
+
+
+
+
+
+hive>create table MySchools(schooltype string,state string,gender string, total map<int,int>) row format delimited fields terminated by ‘\t’ collection items terminated by ‘,’ map keys terminated by ‘:’;
+hive>load data local inpath ‘/home/Desktop/School_Data.txt’ into table MySchools;
+hive>select total[2016] from MySchools where state=’Assam’;
+hive>select total[2017] from MySchools where state=’Chhattisgarh’ and gender=’Female’;
+
+iii:Struct
+Yamaha Ray-Z	Aircooled,149.0,14.0,0
+Hero Maestro	Aircooled,155.0,14.8,0
+Tvs Wego	Aircooled,159.0,15.0,0
+Suzuki	Dtsi-Aircooled,149.0,15.6,0
+Honda	Fule-injection,223.0,20.25,0
+
+
+
+hive>create table MyBikes(name string, BikeFeatures struct<EngineType:string,cc:float,power:float,gears:int>) row format delimited fields terminated by ‘\t’ collection items terminated by ‘,’;
+hive>load data local inpath ‘/home/Desktop/Bikes.txt’ into table MyBikes;
+hive>select BikeFeatures.EngineType from MyBikes;
+hive>select BikeFeatures.EngineType from MyBikes where name=’Suzuki Swish’;
+
+iv: union
+CREATE TABLE empmahidata(cid bigint,cname struct<fname:string,lname:string>,cadd  struct<city:string,state:string>,cages array<smallint>,cfeel map<string,boolean>) row format delimited FIELDS terminated BY '|' collection items terminated BY ',' map KEYS terminated BY ':';
+
+
+input.txt:
+1000000|mahesh,chimmiri|hyd,ap|40|happy:true
+1000000|suresh,chimmili|ongl,ap|42|sad:false
+
+19:udf function
+How to write UDF function in Hive?
+Create Java class for User Defined Function which extends ora.apache.hadoop.hive.sq.exec.UDF amd implement more than one evaluate() methods and put your desisred logic and you are almost there.
+Package your Java class into JAR file (I am using maven)
+Go to Hive CLI – ADD your JAR, verify your JARs in Hive CLI classpath
+CREATE TEMPORARY FUNCTION in hive which points to your Java class
+Use it in Hive SQL and have fun!
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.hive.ql.exec.UDF;
+import org.apache.hadoop.io.Text;
+
+public class Strip extends UDF {
+
+private Text result = new Text();
+ public Text evaluate(Text str, String stripChars) {
+ if(str == null) {
+ return null;
+ }
+ result.set(StringUtils.strip(str.toString(), stripChars));
+ return result;
+ }
+ public Text evaluate(Text str) {
+ if(str == null) {
+ return null;
+ }
+ result.set(StringUtils.strip(str.toString()));
+ return result;
+ }
+}
+
+ii: create jar
+iii:
+hive> ADD /home/cloudera/workspace/HiveUDFs/target/HiveUDFs-0.0.1-SNAPSHOT.jar;
+
+
+
+
+

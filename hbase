@@ -1,0 +1,30 @@
+list
+status
+version
+table_help
+whoami
+create 'student', 'personal data', ’professional data’
+list
+disable 'student'
+scan 'student'
+is_disabled 'student'
+disable_all 'r.*'
+enable 'student'
+scan 'student'
+is_enabled 'student'
+describe 'student'
+alter 'student', NAME => 'personal data', VERSIONS => 5
+alter 't1', READONLY(option)
+alter 't1', METHOD => 'table_att_unset', NAME => 'MAX_FILESIZE'
+alter ‘ table name ’, ‘delete’ => ‘ column family ’
+alter 'studentloyee','delete'=>'professional'
+exists 'student'
+drop_all ‘t.*’
+disable_all 'raj.*'
+put 'student','1','personal data:name','raju'
+get 'student', '1'
+get 'student', 'row1', {COLUMN=>'personal:name'}
+delete 'student', '1', 'personal data:city',1417521848375
+deleteall 'student','1'
+delete 'student', '1', 'personal data:city', 1417521848375
+scan 'student'

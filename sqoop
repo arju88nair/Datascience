@@ -1,0 +1,51 @@
+
+sqoop import \--connect jdbc:mysql://localhost/test \--username hadoop --P \--table tutorials --m 1
+
+hadoop fs -cat /user/training/tutorials/part-m-*
+
+
+sqoop import \--connect jdbc:mysql://localhost/test \--username hadoop --P \--table tutorials \--m 1 \--target-dir /user/training/tutor
+
+
+sqoop import \--connect jdbc:mysql://localhost/test \--username hadoop --P \--table tutorials \--m 1 \--where "tutorial_author='nived'" \--target-dir /user/training/bsnt1
+
+ sqoop import \--connect jdbc:mysql://localhost/test \--username hadoop --P \--table tutorials \--m 1 \--incremental append \--check-tutorial_id \-last value 
+
+sqoop import \--connect jdbc:mysql://localhost/test \--username hadoop --P
+
+
+sqoop import \--connect jdbc:mysql://localhost/test \--username hadoop --p \--table tutorials --target-dir /user/training/kz --incremental append --check-column tutorial_id --last-value 4
+
+
+sqoop export \--connect jdbc:mysql://localhost/test \--username hadoop --P \--table t \--export-dir /user/training/tutor
+sqoop job \--create myjob \--import \--connect jdbc:mysql://localhost/test \--username hadoop --P \--table t --m 1
+
+
+
+sqoop job --create myjob \-- import \--connect jdbc:mysql://localhost/userdb \--username hadoop \--password hadoop \--table t \--m 1 \--target-dir /user/training/myjob
+
+
+
+sqoop job --show myjob
+sqoop job --exec myjob
+
+sqoop codegen \--connect jdbc:mysql://localhost/test \--username hadoop --P \--table t
+
+sqoop eval \--connect jdbc:mysql://localhost/test \--username hadoop --P \--query "SELECT * FROM t LIMIT 2"
+
+sqoop eval \--connect jdbc:mysql://localhost/test \--username hadoop --P \-e "INSERT INTO t VALUES('satish','banglore','2015')"
+
+
+sqoop job --create myjob -- import --connect jdbc:mysql://example.com/db \--table mytable
+
+
+
+
+
+
+optional
+
+sqoop import --connect jdbc:mysql://localhost/test --username hadoop --password hadoop --table CUSTOMERS --target-dir /user/training/kz --incremental append --check-column ID --last-value 6
+
+
+sqoop job --create myjob \-- import \--connect jdbc:mysql://localhost/userdb \--username hadoop \--password hadoop \--table example \--m 1 \--target-dir /user/training/myjob
