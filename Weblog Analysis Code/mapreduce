@@ -1,0 +1,48 @@
+ org.apache.hadoop.mapred
+Interface Mapper<K1,V1,K2,V2>
+
+All Superinterfaces:
+    Closeable, JobConfigurable
+
+All Known Subinterfaces:
+    ILocalAnalysis<K,V>
+
+All Known Implementing Classes:
+    ChainMapper, DataJoinMapperBase, DataJoinReducerBase, DelegatingMapper, DistributedPentomino.PentMap, FieldSelectionMapReduce, IdentityLocalAnalysis, IdentityMapper, IndexUpdateMapper, InverseMapper, JobBase, LineDocLocalAnalysis, MultiFileWordCount.MapClass, PiEstimator.PiMapper, PipeMapper, RegexMapper, SleepJob, TeraGen.SortGenMapper, TokenCountMapper, ValueAggregatorCombiner, ValueAggregatorJobBase, ValueAggregatorMapper, ValueAggregatorReducer
+
+public interface Mapper<K1,V1,K2,V2>
+extends JobConfigurable, Closeable
+
+
+ map
+
+void map(K1 key,
+         V1 value,
+         OutputCollector<K2,V2> output,
+         Reporter reporter)
+         throws IOException
+
+    Maps a single input key/value pair into an intermediate key/value pair.
+
+    Output pairs need not be of the same types as input pairs. A given input pair may map to zero or many output pairs. Output pairs are collected with calls to OutputCollector.collect(Object,Object).
+
+    Applications can use the Reporter provided to report progress or just indicate that they are alive. In scenarios where the application takes an insignificant amount of time to process individual key/value pairs, this is crucial since the framework might assume that the task has timed-out and kill that task. The other way of avoiding this is to set mapred.task.timeout to a high-enough value (or even zero for no time-outs).
+
+    Parameters:
+        key - the input key.
+        value - the input value.
+        output - collects mapped keys and values.
+        reporter - facility to report progress. 
+    Throws:
+        IOException
+
+Reducer :
+		
+		 org.apache.hadoop.mapred
+Interface Reducer<K2,V2,K3,V3>
+
+All Superinterfaces:
+    Closeable, JobConfigurable
+
+All Known Implementing Classes:
+    ChainReducer, DataJoinMapperBase, DataJoinReducerBase, FieldSelectionMapReduce, IdentityReducer, IndexUpdateCombiner, IndexUpdateReducer, JobBase, LongSumReducer, PiEstimator.PiReducer, PipeCombiner, PipeReducer, SleepJob, ValueAggregatorCombiner, ValueAggregatorJobBase, ValueAggregatorMapper, ValueAggregatorReducer 

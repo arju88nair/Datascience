@@ -1,0 +1,89 @@
+--Status hits table
+
+create view error_status_hits_report
+AS
+select status,count(*) as Hits
+from human_hits
+group by status;
+
+--Top referring site
+
+select referrer, count(*) as visits
+from success_human_visits
+group by referrer
+order by visits desc
+limit 10;
+
+--Visit per month:
+create view visit_per_month
+AS
+select concat(year,'-',month),count(*)
+from success_human_visits
+group by concat(year,'-',month);
+
+--top 10 ip's thats using most bandwidth
+create view ips_most_bandwidth
+AS
+select host,(sum(size)/1048576) as MB 
+from human_hits
+group by host
+order by MB desc
+limit 10;
+
+--most request from which ip
+create view ip_visits 
+AS
+select host,count(*) as requests
+from success_human_visits
+group by host
+order by requests desc
+limit 20;
+
+--most request from which user agent
+select agent, (sum(size)/1048576) as MB 
+from success_human_visits
+group by agent
+order by MB desc
+limit 10;
+
+--top request, client_ip and visits
+create view top_request_clientip_visits
+AS
+select request,host, count(request) visits
+from success_human_visits
+group by request,host
+order by visits desc
+limit 10;
+
+--Number of visits per hour
+
+create view no_of_visits_per_hour
+AS
+SELECT classbs.ctry_code, t2.hours, COUNT(*)
+    FROM t2 JOIN classbs ON (t2.host_ip_b = classbs.ip_b)
+    where 
+    GROUP BY classbs.ctry_code, t2.hours;
+
+--Number of visits per country
+create view visits_per_country
+As
+SELECT classbs.ctry_code, COUNT(*) visits          
+FROM t2 JOIN classbs ON (t2.host_ip_b = classbs.ip_b)
+GROUP BY classbs.ctry_code
+order by visits desc
+limit 10;
+
+--Unique visitors:
+select DISTINCT host  
+from success_human_visits
+limit 30;
+
+--Unique IP's Count
+select count(DISTINCT host) from success_human_visits;
+
+
+--Total Pageviews
+select count(request) pageviews
+from success_human_visits;
+
+
