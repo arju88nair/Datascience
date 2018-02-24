@@ -1,3 +1,4 @@
+hadoop dfsadmin -safemode leave
 CREATE EXTERNAL TABLE rawdata (
   host STRING,
   identity STRING,
@@ -26,7 +27,7 @@ load data local inpath '/home/hduser/Desktop/Datasets/Input_Data' into table raw
 
 
 
-
+add jar hive contrib
 --Data Cleaning
 
 CREATE TABLE hh_tmp
