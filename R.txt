@@ -1,0 +1,35 @@
+Easy to understand
+Data storage facilities providing
+Visalisation
+Machine learnning libraries
+Support
+
+Basic Data types
+	Numeric ->Decimals
+	Complex-> i
+	Integer
+	Logical
+	Character
+
+getwd() -> File evnironments
+setwd() -> Set the environments
+head()  -> Top 6 rows
+apropos('mea') - > list complete
+<- assignemnt operators
+print(a)
+class(a) -> similar to typeof
+as.integer()
+is.numeric()
+s= qrt(−1+0i) -> Complex
+
+
+Data series in Statistics 
+	Individual data seires
+	Discrete data series
+	Continous data series
+	Covariance
+	Linear regression
+
+
+
+ 
